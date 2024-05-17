@@ -1,0 +1,991 @@
+local library = {}
+library.flags = {}
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Hb = game:GetService("RunService").Heartbeat;
+
+local MainBlueColor
+local MainBackColor
+local MainTextColor
+
+local Halloween = false
+local Christmas = false
+
+if Halloween == false and Christmas == false then
+	MainBlueColor = Color3.fromRGB(0, 118, 173)
+	MainBackColor = Color3.fromRGB(39, 39, 39)
+	MainTextColor = Color3.fromRGB(255, 255, 255)
+elseif Halloween == true then
+	MainBlueColor = Color3.fromRGB(216, 86, 0)
+	MainBackColor = Color3.fromRGB(25, 25, 25)
+	MainTextColor = Color3.fromRGB(255, 255, 255)
+elseif Christmas == true then
+	MainBlueColor = Color3.fromRGB(216, 0, 0)
+	MainBackColor = Color3.fromRGB(7, 200, 30)
+	MainTextColor = Color3.fromRGB(255, 255, 255)
+end
+
+function library:CreateWindow(name)
+	assert(type(name) == "string", "specify type string for CreateWindow function")
+
+	local UIV2 = Instance.new("ScreenGui")
+	local MainFrame = Instance.new("Frame")
+	local Title = Instance.new("TextLabel")
+	local Containers = Instance.new("Frame")
+	local FrameCorner = Instance.new("UICorner")
+	local Bar = Instance.new("Frame")
+	local SideContainer = Instance.new("Frame")
+	local ContainerListLayout = Instance.new("UIListLayout")
+	local ContainerPadding = Instance.new("UIPadding")
+	local MinimizeButton = Instance.new("TextButton")
+	local MinimizeButton = Instance.new("ImageButton")
+	local UIS = game:GetService("UserInputService") 
+	local CustomizerOpenButton = Instance.new("TextButton")
+
+	function dragify(Frame)
+		dragToggle = nil
+		local dragSpeed = 0
+		dragInput = nil
+		dragStart = nil
+		local dragPos = nil
+		function updateInput(input)
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end
+
+	dragify(MainFrame)
+
+	UIV2.Name = "UI V2"
+	UIV2.Parent = game:GetService("CoreGui")
+	UIV2.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	MainFrame.Name = "MainFrame"
+	MainFrame.Parent = UIV2
+	MainFrame.BackgroundColor3 = MainBackColor
+	MainFrame.BorderSizePixel = 0
+	MainFrame.Position = UDim2.new(0.312544763, 0, 0.166574314, 0)
+	MainFrame.Size = UDim2.new(0, 502, 0, 74)
+
+	Title.Name = name
+	Title.Parent = MainFrame
+	Title.BackgroundColor3 = MainTextColor
+	Title.BackgroundTransparency = 1.000
+	Title.BorderSizePixel = 0
+	Title.Position = UDim2.new(0.0200714413, 0, 0.00306394883, 0)
+	Title.Size = UDim2.new(0, 458, 0, 30)
+	Title.Font = Enum.Font.SourceSans
+	Title.Text = name
+	Title.TextColor3 = MainBlueColor
+	Title.TextSize = 23.000
+	Title.TextXAlignment = Enum.TextXAlignment.Left
+
+	Bar.Name = "Bar"
+	Bar.Parent = MainFrame
+	Bar.BackgroundColor3 = MainBlueColor
+	Bar.BorderSizePixel = 0
+	Bar.Position = UDim2.new(0, 0, 0.408469319, 0)
+	Bar.Size = UDim2.new(1, 0, 0.0199999996, 0)
+
+	-- FrameCorner.CornerRadius = UDim.new(0, 3)
+	-- FrameCorner.Name = "FrameCorner"
+	-- FrameCorner.Parent = MainFrame
+
+	SideContainer.Name = "SideContainer"
+	SideContainer.Parent = MainFrame
+	SideContainer.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+	SideContainer.BackgroundTransparency = 1.000
+	SideContainer.BorderSizePixel = 0
+	SideContainer.Position = UDim2.new(0, 0, 0.468414396, 0)
+	SideContainer.Size = UDim2.new(0, 501, 0, 37)
+
+	ContainerListLayout.Name = "ContainerListLayout"
+	ContainerListLayout.Parent = SideContainer
+	ContainerListLayout.FillDirection = Enum.FillDirection.Horizontal
+	ContainerListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	ContainerListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	ContainerListLayout.Padding = UDim.new(0.00999999978, 1)
+
+	ContainerPadding.Name = "ContainerPadding"
+	ContainerPadding.Parent = SideContainer
+	ContainerPadding.PaddingLeft = UDim.new(0, 10)
+	ContainerPadding.PaddingTop = UDim.new(0, 2)
+
+	Containers.Name = "Containers"
+	Containers.Parent = MainFrame
+	Containers.BackgroundColor3 = MainBackColor
+	Containers.BorderSizePixel = 0
+	Containers.ClipsDescendants = true
+	Containers.Position = UDim2.new(0, 0, 0.99000001, 0)
+	Containers.Size = UDim2.new(0, 502, 0, 473)
+
+	MinimizeButton.Name = "MinimizeButton"
+	MinimizeButton.Parent = MainFrame
+	MinimizeButton.BackgroundTransparency = 1.000
+	MinimizeButton.Position = UDim2.new(1, -30, 0.0670000017, 0)
+	MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
+	MinimizeButton.ZIndex = 2
+	MinimizeButton.Image = "rbxassetid://3926307971"
+	MinimizeButton.ImageRectOffset = Vector2.new(164, 484)
+	MinimizeButton.ImageRectSize = Vector2.new(36, 36)
+
+	CustomizerOpenButton.Name = "CustomizerOpenButton"
+	CustomizerOpenButton.Parent = MainFrame
+	CustomizerOpenButton.BackgroundColor3 = MainTextColor
+	CustomizerOpenButton.BackgroundTransparency = 1.000
+	CustomizerOpenButton.Position = UDim2.new(0.942231238, -30, 0.0270270277, 0)
+	CustomizerOpenButton.Size = UDim2.new(0, 25, 0, 25)
+	CustomizerOpenButton.Font = Enum.Font.SourceSans
+	CustomizerOpenButton.Text = "UI"
+	CustomizerOpenButton.TextColor3 = Color3.fromRGB(255, 190, 197)
+	CustomizerOpenButton.TextScaled = true
+	CustomizerOpenButton.TextSize = 14.000
+	CustomizerOpenButton.TextStrokeColor3 = Color3.fromRGB(255, 190, 197)
+	CustomizerOpenButton.TextStrokeTransparency = 0.000
+	CustomizerOpenButton.TextWrapped = true
+
+	local twnInf = TweenInfo.new(1, Enum.EasingStyle.Elastic)
+
+	local twnDown = game:GetService("TweenService")
+	local twDown = twnDown:Create(MinimizeButton, twnInf, { Rotation = 180 })
+
+	local twnUp = game:GetService("TweenService")
+	local twUp = twnUp:Create(MinimizeButton, twnInf, { Rotation = 0 })
+
+	UIS.InputBegan:Connect(function(input)
+		local keyprsd = input.KeyCode.EnumType.RightControl
+		if input.KeyCode == keyprsd then
+			Containers.Visible = not Containers.Visible
+			if Containers.Visible == false then
+				--down
+				twDown:Play()
+				twDown:Destroy()
+			else
+				--up
+				twUp:Play()
+				twUp:Destroy()
+			end
+		end
+	end)
+
+	MinimizeButton.MouseButton1Click:Connect(function()
+		Containers.Visible = not Containers.Visible
+		if Containers.Visible == false then
+			--down
+			twDown:Play()
+			twDown:Destroy()
+		else
+			--up
+			twUp:Play()
+			twUp:Destroy()
+		end
+	end)
+
+	-- Customizer
+
+	local CustomizerFrame = Instance.new("Frame")
+	local CustomizerTitle = Instance.new("TextLabel")
+	local CustomizerFrameCorner = Instance.new("UICorner")
+	local CustomizerBar = Instance.new("Frame")
+	local CustomizerContainers = Instance.new("Frame")
+	local CustomizerCategoriesGridLayout = Instance.new("UIGridLayout")
+	local CustomizerCategoriesPadding = Instance.new("UIPadding")
+	local CustomizerCloseButton = Instance.new("TextButton")
+
+	local CustomizerSideContainer = Instance.new("Frame")
+	local CustomizerContainerListLayout = Instance.new("UIListLayout")
+	local CustomizerContainerPadding = Instance.new("UIPadding")
+	local CustomizerMain = Instance.new("TextButton")
+	local CustomizerMainUICorner = Instance.new("UICorner")
+	local CustomizerText = Instance.new("TextButton")
+	local CustomizerTextUICorner = Instance.new("UICorner")
+	local CustomizerBack = Instance.new("TextButton")
+	local CustomizerBackUICorner = Instance.new("UICorner")
+
+	CustomizerFrame.Name = "CustomizerFrame"
+	CustomizerFrame.Parent = UIV2
+	CustomizerFrame.BackgroundColor3 = MainBackColor
+	CustomizerFrame.BorderSizePixel = 0
+	CustomizerFrame.Position = UDim2.new(0.488822609, 0, 0.223434627, 0)
+	CustomizerFrame.Size = UDim2.new(0, 502, 0, 74)
+	CustomizerFrame.Visible = false
+
+	CustomizerTitle.Name = "CustomizerTitle"
+	CustomizerTitle.Parent = CustomizerFrame
+	CustomizerTitle.BackgroundColor3 = MainTextColor
+	CustomizerTitle.BackgroundTransparency = 1.000
+	CustomizerTitle.BorderSizePixel = 0
+	CustomizerTitle.Position = UDim2.new(0.0200714413, 0, 0.00306394883, 0)
+	CustomizerTitle.Size = UDim2.new(0, 458, 0, 30)
+	CustomizerTitle.Font = Enum.Font.SourceSans
+	CustomizerTitle.Text = "UI Customize"
+	CustomizerTitle.TextColor3 = MainTextColor
+	CustomizerTitle.TextSize = 23.000
+	CustomizerTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+	CustomizerFrameCorner.CornerRadius = UDim.new(0, 3)
+	CustomizerFrameCorner.Name = "CustomizerFrameCorner"
+	CustomizerFrameCorner.Parent = CustomizerFrame
+
+	CustomizerBar.Name = "CustomizerBar"
+	CustomizerBar.Parent = CustomizerFrame
+	CustomizerBar.BackgroundColor3 = MainBlueColor
+	CustomizerBar.BorderSizePixel = 0
+	CustomizerBar.Position = UDim2.new(0, 0, 0.408469319, 0)
+	CustomizerBar.Size = UDim2.new(1, 0, 0.0199999996, 0)
+
+	CustomizerContainers.Name = "CustomizerContainers"
+	CustomizerContainers.Parent = CustomizerFrame
+	CustomizerContainers.BackgroundColor3 = MainBackColor
+	CustomizerContainers.BorderSizePixel = 0
+	CustomizerContainers.ClipsDescendants = true
+	CustomizerContainers.Position = UDim2.new(0, 0, 0.98999995, 0)
+	CustomizerContainers.Size = UDim2.new(0, 502, 0, 168)
+
+	CustomizerCategoriesGridLayout.Name = "CustomizerCategoriesGridLayout"
+	CustomizerCategoriesGridLayout.Parent = CustomizerContainers
+	CustomizerCategoriesGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	CustomizerCategoriesGridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
+	CustomizerCategoriesGridLayout.CellSize = UDim2.new(0, 50, 0, 40)
+
+	CustomizerCategoriesPadding.Name = "CustomizerCategoriesPadding"
+	CustomizerCategoriesPadding.Parent = CustomizerContainers
+	CustomizerCategoriesPadding.PaddingLeft = UDim.new(0, 20)
+	CustomizerCategoriesPadding.PaddingTop = UDim.new(0, 10)
+
+	CustomizerCloseButton.Name = "CustomizerCloseButton"
+	CustomizerCloseButton.Parent = CustomizerFrame
+	CustomizerCloseButton.BackgroundColor3 = MainTextColor
+	CustomizerCloseButton.BackgroundTransparency = 1.000
+	CustomizerCloseButton.Position = UDim2.new(1.00000012, -30, 0, 0)
+	CustomizerCloseButton.Size = UDim2.new(0, 30, 0, 29)
+	CustomizerCloseButton.Font = Enum.Font.SourceSans
+	CustomizerCloseButton.Text = "X"
+	CustomizerCloseButton.TextColor3 = Color3.fromRGB(255, 190, 197)
+	CustomizerCloseButton.TextScaled = true
+	CustomizerCloseButton.TextSize = 14.000
+	CustomizerCloseButton.TextStrokeColor3 = Color3.fromRGB(255, 190, 197)
+	CustomizerCloseButton.TextStrokeTransparency = 0.000
+	CustomizerCloseButton.TextWrapped = true
+
+
+	CustomizerSideContainer.Name = "CustomizerSideContainer"
+	CustomizerSideContainer.Parent = CustomizerFrame
+	CustomizerSideContainer.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+	CustomizerSideContainer.BackgroundTransparency = 1.000
+	CustomizerSideContainer.BorderSizePixel = 0
+	CustomizerSideContainer.Position = UDim2.new(0, 0, 0.468414396, 0)
+	CustomizerSideContainer.Size = UDim2.new(0, 501, 0, 37)
+
+	CustomizerContainerListLayout.Name = "CustomizerContainerListLayout"
+	CustomizerContainerListLayout.Parent = CustomizerSideContainer
+	CustomizerContainerListLayout.FillDirection = Enum.FillDirection.Horizontal
+	CustomizerContainerListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	CustomizerContainerListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	CustomizerContainerListLayout.Padding = UDim.new(0.00999999978, 1)
+
+	CustomizerContainerPadding.Name = "CustomizerContainerPadding"
+	CustomizerContainerPadding.Parent = CustomizerSideContainer
+	CustomizerContainerPadding.PaddingLeft = UDim.new(0, 10)
+	CustomizerContainerPadding.PaddingTop = UDim.new(0, 2)
+
+	CustomizerMain.Name = "CustomizerMain"
+	CustomizerMain.Parent = CustomizerSideContainer
+	CustomizerMain.BackgroundColor3 = MainBlueColor
+	CustomizerMain.Position = UDim2.new(-0.0203665979, 0, -0.260869563, 0)
+	CustomizerMain.Size = UDim2.new(0, 85, 0, 23)
+	CustomizerMain.Font = Enum.Font.SourceSans
+	CustomizerMain.Text = "Main"
+	CustomizerMain.TextColor3 = MainTextColor
+	CustomizerMain.TextSize = 20.000
+
+	CustomizerMainUICorner.CornerRadius = UDim.new(0, 5)
+	CustomizerMainUICorner.Name = "CustomizerMainUICorner"
+	CustomizerMainUICorner.Parent = CustomizerMain
+
+	CustomizerText.Name = "CustomizerText"
+	CustomizerText.Parent = CustomizerSideContainer
+	CustomizerText.BackgroundColor3 = MainBlueColor
+	CustomizerText.Position = UDim2.new(-0.0203665979, 0, -0.260869563, 0)
+	CustomizerText.Size = UDim2.new(0, 85, 0, 23)
+	CustomizerText.Font = Enum.Font.SourceSans
+	CustomizerText.Text = "Text"
+	CustomizerText.TextColor3 = MainTextColor
+	CustomizerText.TextSize = 20.000
+
+	CustomizerTextUICorner.CornerRadius = UDim.new(0, 5)
+	CustomizerTextUICorner.Name = "CustomizerMainUICorner"
+	CustomizerTextUICorner.Parent = CustomizerText
+
+	CustomizerBack.Name = "CustomizerBack"
+	CustomizerBack.Parent = CustomizerSideContainer
+	CustomizerBack.BackgroundColor3 = MainBlueColor
+	CustomizerBack.Position = UDim2.new(-0.0203665979, 0, -0.260869563, 0)
+	CustomizerBack.Size = UDim2.new(0, 85, 0, 23)
+	CustomizerBack.Font = Enum.Font.SourceSans
+	CustomizerBack.Text = "Back"
+	CustomizerBack.TextColor3 = MainTextColor
+	CustomizerBack.TextSize = 20.000
+
+	CustomizerBackUICorner.CornerRadius = UDim.new(0, 5)
+	CustomizerBackUICorner.Name = "CustomizerBackUICorner"
+	CustomizerBackUICorner.Parent = CustomizerBack
+
+	local Colors = {
+		["BackgroundColor"] = MainBackColor,
+		["Yellow"] = Color3.fromRGB(255, 236, 89),
+		["Pink"] = Color3.fromRGB(255, 133, 139),
+		["Red"] = Color3.fromRGB(235, 0, 3),
+		["Purple"] = Color3.fromRGB(92, 35, 207),
+		["Green"] = Color3.fromRGB(0, 170, 0),
+		["Orange"] = Color3.fromRGB(216, 86, 0),
+
+		["White"] = Color3.fromRGB(255,255,255),
+		["Black"] = Color3.fromRGB(0,0,0),
+		["Default"] = Color3.fromRGB(0, 118, 173)
+	}
+
+	CustomizerCloseButton.MouseButton1Click:Connect(function()
+		CustomizerFrame.Visible = false
+		MainFrame.Visible = true
+	end)
+
+	CustomizerOpenButton.MouseButton1Click:Connect(function()
+		CustomizerFrame.Visible = true
+		MainFrame.Visible = false
+	end)
+
+	function getColors()
+		for _,v  in pairs(Colors) do
+			local ColorButton = Instance.new("TextButton")
+			ColorButton.Name = "ColorButton"
+			ColorButton.Parent = CustomizerContainers
+			ColorButton.BackgroundColor3 = v
+			ColorButton.Size = UDim2.new(0, 57, 0, 40)
+			ColorButton.Font = Enum.Font.SourceSans
+			ColorButton.Text = ""
+
+			ColorButton.MouseButton1Click:Connect(function()
+				CustomizerBar.BackgroundColor3 = v
+				Bar.BackgroundColor3 = v
+				CustomizerMain.BackgroundColor3 = v
+				CustomizerText.BackgroundColor3 = v
+				CustomizerBack.BackgroundColor3 = v
+				for _,SideButton in pairs(SideContainer:GetChildren()) do
+					if SideButton:IsA("TextButton") then
+						SideButton.BackgroundColor3 = v
+					end
+				end
+				for _,CustomFrame in pairs(Containers:GetChildren()) do
+					for _,thing in pairs(CustomFrame:GetChildren()) do
+						if thing:IsA("UIGridLayout") or thing:IsA("UIPadding") then
+						else
+							if thing.Name == "Dropdown" then
+								thing.BackgroundColor3 = v
+								thing.DropdownText.DropdownToggleButton.BackgroundColor3 = v
+								if v == Color3.fromRGB(0,0,0) then
+									thing.DropdownText.DropdownToggleButton.DropdownToggleUIStroke.Color = Color3.fromRGB(255,255,255)
+								else
+									thing.DropdownText.DropdownToggleButton.DropdownToggleUIStroke.Color = Color3.fromRGB(0,0,0)
+								end
+								for _,lilbut in pairs(thing.DropdownContainers:GetChildren()) do
+									if lilbut:IsA("TextButton") then
+										lilbut.BackgroundColor3 = v
+									end
+								end
+							end
+							thing.BackgroundColor3 = v
+						end
+					end
+				end
+			end)
+		end
+	end
+
+	function getTextColors()
+		for _,v  in pairs(Colors) do
+			local ColorButton = Instance.new("TextButton")
+			ColorButton.Name = "ColorButton"
+			ColorButton.Parent = CustomizerContainers
+			ColorButton.BackgroundColor3 = v
+			ColorButton.Size = UDim2.new(0, 57, 0, 40)
+			ColorButton.Font = Enum.Font.SourceSans
+			ColorButton.Text = "text"
+			ColorButton.TextScaled = true
+
+			ColorButton.MouseButton1Click:Connect(function()
+				CustomizerMain.TextColor3 = v
+				CustomizerText.TextColor3 = v
+				Title.TextColor3 = v
+				CustomizerTitle.TextColor3 = v
+				CustomizerBack.TextColor3 = v
+				for _,SideButton in pairs(SideContainer:GetChildren()) do
+					if SideButton:IsA("TextButton") then
+						SideButton.TextColor3 = v
+					end
+				end
+				for _,CustomFrame in pairs(Containers:GetChildren()) do
+
+					for _,thing in pairs(CustomFrame:GetChildren()) do
+						if thing:IsA("UIGridLayout") or thing:IsA("UIPadding") then
+						else
+							if thing.Name == "Dropdown" then
+								thing.DropdownText.TextColor3 = v
+								thing.DropdownText.DropdownToggleButton.TextColor3 = v
+								for _,lilbut in pairs(thing.DropdownContainers:GetChildren()) do
+									if lilbut:IsA("TextButton") then
+										lilbut.TextColor3 = v
+									end
+								end
+
+							elseif thing.Name == "Button" then
+								thing.TextColor3 = v
+							else
+								thing.Label.TextColor3 = v
+							end
+						end
+					end
+
+				end
+			end)
+		end
+	end
+
+	function getBackColors()
+		for _,v  in pairs(Colors) do
+			local ColorButton = Instance.new("TextButton")
+			ColorButton.Name = "ColorButton"
+			ColorButton.Parent = CustomizerContainers
+			ColorButton.BackgroundColor3 = v
+			ColorButton.Size = UDim2.new(0, 57, 0, 40)
+			ColorButton.Font = Enum.Font.SourceSans
+			ColorButton.Text = "back"
+			ColorButton.TextScaled = true
+
+			ColorButton.MouseButton1Click:Connect(function()
+				CustomizerFrame.BackgroundColor3 = v
+				CustomizerContainers.BackgroundColor3 = v
+				MainFrame.BackgroundColor3 = v
+				Containers.BackgroundColor3 = v
+			end)
+		end
+	end
+
+
+	getColors()
+
+	CustomizerMain.MouseButton1Click:Connect(function()
+		for _,v in pairs(CustomizerContainers:GetChildren()) do
+			if v:IsA("TextButton") then
+				v:Destroy()
+			end
+		end
+		getColors()
+	end)
+
+	CustomizerText.MouseButton1Click:Connect(function()
+		for _,v in pairs(CustomizerContainers:GetChildren()) do
+			if v:IsA("TextButton") then
+				v:Destroy()
+			end
+		end
+		getTextColors()
+	end)
+
+	CustomizerBack.MouseButton1Click:Connect(function()
+		for _,v in pairs(CustomizerContainers:GetChildren()) do
+			if v:IsA("TextButton") then
+				v:Destroy()
+			end
+		end
+		getBackColors()
+	end)
+
+	local category = {}
+
+	function category:new(name)
+		assert(type(name) == "string", "specify type string for new() function")
+		local Categories = Instance.new("ScrollingFrame")
+		local CategoriesPadding = Instance.new("UIPadding")
+		local CategoriesGridLayout = Instance.new("UIGridLayout")
+		local CategoryBtn = Instance.new("TextButton")
+		local UICorner = Instance.new("UICorner")
+
+		Categories.Name = name
+		Categories.Parent = Containers
+		Categories.Active = true
+		Categories.BackgroundColor3 = MainTextColor
+		Categories.BackgroundTransparency = 1.000
+		Categories.BorderSizePixel = 0
+		Categories.Position = UDim2.new(0, 0, -0.00145806919, 0)
+		Categories.Size = UDim2.new(0, 501, 0, 474)
+		Categories.ScrollBarThickness = 6
+		Categories.Visible = false
+
+		CategoriesPadding.Name = "CategoriesPadding"
+		CategoriesPadding.Parent = Categories
+		CategoriesPadding.PaddingLeft = UDim.new(0, 20)
+		CategoriesPadding.PaddingTop = UDim.new(0, 10)
+
+		CategoriesGridLayout.Name = "CategoriesGridLayout"
+		CategoriesGridLayout.Parent = Categories
+		CategoriesGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		CategoriesGridLayout.CellPadding = UDim2.new(0, 0, 0, 10)
+		CategoriesGridLayout.CellSize = UDim2.new(0, 455, 0, 40)
+
+		CategoryBtn.Name = "CategoryBtn"
+		CategoryBtn.Parent = SideContainer
+		CategoryBtn.BackgroundColor3 = MainBlueColor
+		CategoryBtn.Position = UDim2.new(-0.0203665979, 0, -0.260869563, 0)
+		CategoryBtn.Size = UDim2.new(0, 85, 0, 23)
+		CategoryBtn.Font = Enum.Font.SourceSans
+		CategoryBtn.Text = name
+		CategoryBtn.TextColor3 = MainTextColor
+		CategoryBtn.TextSize = 20.000
+		CategoryBtn.MouseButton1Click:Connect(function()
+			for i,v in pairs(Containers:GetChildren()) do
+				v.Visible = false;
+			end
+
+			Categories.Visible = true;
+		end)
+
+		UICorner.CornerRadius = UDim.new(0, 5)
+		UICorner.Parent = CategoryBtn
+
+		local module = {}
+
+		function module:CreateButton(name, cb)
+			assert(type(name) == "string", "specify type string for CreateButton() function")
+			local Button = Instance.new("TextButton")
+			local BtnCorner = Instance.new("UICorner")
+
+			Button.Name = "Button"
+			Button.Parent = Categories
+			Button.BackgroundColor3 = MainBlueColor
+			Button.BorderSizePixel = 0
+			Button.Size = UDim2.new(0, 459, 0, 32)
+			Button.Font = Enum.Font.SourceSans
+			Button.TextColor3 = MainTextColor
+			Button.TextSize = 26.000
+			Button.Text = name
+			Button.MouseButton1Click:Connect(cb)
+
+			BtnCorner.CornerRadius = UDim.new(0, 5)
+			BtnCorner.Name = "BtnCorner"
+			BtnCorner.Parent = Button
+		end
+
+		function module:CreateToggle(name, Repeat, cb)
+			assert(type(name) == "string", "specify type string for CreateToggle() function")
+			local Toggle = Instance.new("Frame")
+			local ToggleButton = Instance.new("TextButton")
+			local ToggleCorner = Instance.new("UICorner")
+			local Label = Instance.new("TextLabel")
+
+			Toggle.Name = "Toggle"
+			Toggle.Parent = Categories
+			Toggle.BackgroundColor3 = MainTextColor
+			Toggle.BackgroundTransparency = 1.000
+			Toggle.Size = UDim2.new(0, 100, 0, 100)
+
+			ToggleButton.Name = "ToggleButton"
+			ToggleButton.Parent = Toggle
+			ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+			ToggleButton.BorderSizePixel = 0
+			ToggleButton.Position = UDim2.new(0, 2, 0, 3)
+			ToggleButton.Size = UDim2.new(0, 25, 0, 25)
+			ToggleButton.Font = Enum.Font.SourceSans
+			ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+			ToggleButton.TextSize = 14.000
+			ToggleButton.TextTransparency = 1.000
+
+			ToggleCorner.Name = "ToggleCorner"
+			ToggleCorner.Parent = ToggleButton
+
+			Label.Name = "Label"
+			Label.Parent = Toggle
+			Label.BackgroundColor3 = MainTextColor
+			Label.BackgroundTransparency = 1.000
+			Label.Size = UDim2.new(1, 0, 0, 32)
+			Label.Font = Enum.Font.SourceSans
+			Label.Text = name
+			Label.TextColor3 = MainTextColor
+			Label.TextSize = 26.000
+
+			local tog = false
+			local togCon = nil
+
+			ToggleButton.MouseButton1Click:Connect(function()
+				tog = not tog
+
+				library.flags[name] = tog
+
+				if Repeat then
+					if tog then
+						togCon = RunService.RenderStepped:Connect(cb)
+						ToggleButton.BackgroundColor3 = Color3.new(0, 255, 0)
+					else
+						togCon:Disconnect()
+						ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+					end
+				else
+					cb(tog)
+				end
+			end)
+		end
+
+		function module:CreateSlider(name, option, callback)
+			assert(type(name) == "string", "specify type string for CreateSlider() function")
+			assert(type(option) == "table", "specify type table for CreateSlider() function Example: {default = 1, min = 1, max = 16}")
+			assert(type(callback) == "function", "specify type function for CreateSlider()")
+			local callback = callback or function () end
+
+			local Slider = Instance.new("Frame")
+			local Label_2 = Instance.new("TextLabel")
+			local SliderButton = Instance.new("TextButton")
+			local SliderCorner = Instance.new("UICorner")
+			local BackSlider = Instance.new("Frame")
+
+			Slider.Name = "Slider"
+			Slider.Parent = Categories
+			Slider.BackgroundColor3 = MainBlueColor
+			Slider.Position = UDim2.new(0, 0, 0, 0)
+			Slider.Size = UDim2.new(0, 455, 0, 42)
+
+			Label_2.Name = "Label"
+			Label_2.Parent = Slider
+			Label_2.BackgroundColor3 = MainTextColor
+			Label_2.BackgroundTransparency = 1.000
+			Label_2.Position = UDim2.new(0.294505507, 0, 0.271428674, 0)
+			Label_2.Size = UDim2.new(0.40882349, 0, -0.677678645, 32)
+			Label_2.Font = Enum.Font.SourceSans
+			Label_2.Text = name..": "..tostring(option.default)
+			Label_2.TextColor3 = MainTextColor
+			Label_2.TextSize = 26.000
+
+			SliderButton.Name = "SliderButton"
+			SliderButton.Parent = Slider
+			SliderButton.BackgroundColor3 = Color3.fromRGB(167, 167, 167)
+			SliderButton.BorderSizePixel = 0
+			SliderButton.Position = UDim2.new(0, 32, 0, 25)
+			SliderButton.Size = UDim2.new(0, 397, 0, 8)
+			SliderButton.Font = Enum.Font.SourceSans
+			SliderButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+			SliderButton.TextSize = 14.000
+			SliderButton.TextTransparency = 1.000
+
+			SliderCorner.CornerRadius = UDim.new(0, 5)
+			SliderCorner.Name = "SliderCorner"
+			SliderCorner.Parent = Slider
+
+
+			BackSlider.Name = "BackSlider"
+			BackSlider.Parent = SliderButton
+			BackSlider.BackgroundColor3 = Color3.fromRGB(0, 152, 222)
+			BackSlider.Position = UDim2.new(0, 0, 0, 0)
+			BackSlider.Size = UDim2.new(0, 0, 0, 8)
+
+			local mousedown = false
+
+			UIS.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then mousedown = false end end)
+			SliderButton.MouseButton1Down:Connect(function() mousedown = true end)
+			SliderButton.MouseButton1Up:Connect(function() mousedown = false end);
+
+			Hb:Connect(function()
+				if mousedown then
+					local mouse = game:GetService("UserInputService"):GetMouseLocation()
+					local percent = (mouse.X - SliderButton.AbsolutePosition.X) / (SliderButton.AbsoluteSize.X + 35)
+					percent = math.clamp(percent, 0, 1)
+					local Value = option.min + (option.max - option.min) * percent
+
+					if option.floor then
+						Value = math.floor(Value)                 
+					end
+
+					BackSlider:TweenSize(UDim2.new(percent, 0, 1 ,0), "Out", "Quad", 0.02, true)
+					Value = tonumber(string.format("%.2f", Value))
+					Label_2.Text = ("%s: %s"):format(name, Value)
+
+					library.flags[name] = Value
+					callback(Value)
+
+				end
+			end)
+		end
+
+		function module:CreateDropdown(name, itemlist, callback)
+			assert(type(name) == "string", "You need to specify a name for the dropdown. (string)");
+
+			local Dropdown = Instance.new("Frame")
+			local DropdownCorner = Instance.new("UICorner")
+			local DropdownText = Instance.new("TextLabel")
+			local DropdownTextCorner = Instance.new("UICorner")
+			local DropdownToggleButton = Instance.new("TextButton")
+			local DropdownToggleButtonCorner = Instance.new("UICorner")
+			local DropdownToggleButtonUIStorke = Instance.new("UIStroke")
+			local DropdownContainers = Instance.new("ScrollingFrame")
+			local DropdownUIGridLayout = Instance.new("UIGridLayout")
+			local DropdownContainersUIPadding = Instance.new("UIPadding")
+			local SearchBox = Instance.new("TextBox")
+			local SearchBoxCorner = Instance.new("UICorner")
+
+			Dropdown.Name = "Dropdown"
+			Dropdown.Parent = Categories
+			Dropdown.BackgroundColor3 = MainBlueColor
+			Dropdown.BorderSizePixel = 0
+			Dropdown.Position = UDim2.new(0, 0, 0.436681211, 0)
+			Dropdown.Size = UDim2.new(0, 440, 0, 66)
+			Dropdown.ZIndex = 3
+
+			DropdownCorner.CornerRadius = UDim.new(0, 5)
+			DropdownCorner.Name = "DropdownCorner"
+			DropdownCorner.Parent = Dropdown
+
+			DropdownText.Name = "DropdownText"
+			DropdownText.Parent = Dropdown
+			DropdownText.BackgroundColor3 = Color3.fromRGB(0, 104, 153)
+			DropdownText.BackgroundTransparency = 1.000
+			DropdownText.Position = UDim2.new(0.0175824184, 0, 0.0297470093, 0)
+			DropdownText.Size = UDim2.new(0, 299, 0, 38)
+			DropdownText.Font = Enum.Font.SourceSans
+			DropdownText.TextColor3 = MainTextColor
+			DropdownText.TextSize = 26.000
+			DropdownText.TextWrapped = true
+			DropdownText.TextXAlignment = Enum.TextXAlignment.Left
+			DropdownText.Text = name.." - Not Selected"
+
+			DropdownTextCorner.CornerRadius = UDim.new(0, 5)
+			DropdownTextCorner.Name = "DropdownTextCorner"
+			DropdownTextCorner.Parent = DropdownText
+
+			DropdownToggleButton.Name = "DropdownToggleButton"
+			DropdownToggleButton.Parent = DropdownText
+			DropdownToggleButton.BackgroundColor3 = MainBlueColor
+			DropdownToggleButton.Position = UDim2.new(1.05967724, 0, 0.133333713, 0)
+			DropdownToggleButton.Size = UDim2.new(0, 104, 0, 26)
+			DropdownToggleButton.Font = Enum.Font.SourceSans
+			DropdownToggleButton.Text = "Open"
+			DropdownToggleButton.TextColor3 = MainTextColor
+			DropdownToggleButton.TextSize = 26.000
+			DropdownToggleButton.TextWrapped = true
+
+			DropdownToggleButtonCorner.CornerRadius = UDim.new(0, 7)
+			DropdownToggleButtonCorner.Name = "DropdownToggleButtonCorner"
+			DropdownToggleButtonCorner.Parent = DropdownToggleButton
+
+			DropdownToggleButtonUIStorke.Name = "DropdownToggleUIStroke"
+			DropdownToggleButtonUIStorke.Parent = DropdownToggleButton
+			DropdownToggleButtonUIStorke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+			DropdownContainers.Name = "DropdownContainers"
+			DropdownContainers.Parent = Dropdown
+			DropdownContainers.Active = true
+			DropdownContainers.BackgroundColor3 = Color3.fromRGB(6, 29, 202)
+			DropdownContainers.BackgroundTransparency = 1
+			DropdownContainers.BorderSizePixel = 0
+			DropdownContainers.Position = UDim2.new(0, 0, 1, 0)
+			DropdownContainers.Size = UDim2.new(0, 455, 0, 416)
+			DropdownContainers.Visible = false
+			DropdownContainers.ZIndex = 3
+
+			DropdownContainersUIPadding.Name = "DropdownUIPadding"
+			DropdownContainersUIPadding.Parent = DropdownContainers
+			DropdownContainersUIPadding.PaddingLeft = UDim.new(0, 20)
+			DropdownContainersUIPadding.PaddingTop = UDim.new(0, 10)
+
+			DropdownUIGridLayout.Name = "DropdownUIGridLayout"
+			DropdownUIGridLayout.Parent = DropdownContainers
+			DropdownUIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			DropdownUIGridLayout.CellPadding = UDim2.new(0, 0, 0, 10)
+			DropdownUIGridLayout.CellSize = UDim2.new(0, 410, 0, 25)
+
+			SearchBox.Name = "SearchBox"
+			SearchBox.Parent = DropdownContainers
+			SearchBox.BackgroundColor3 = MainBlueColor
+			SearchBox.LayoutOrder = -1
+			SearchBox.Size = UDim2.new(0, 200, 0, 50)
+			SearchBox.Font = Enum.Font.SourceSans
+			SearchBox.PlaceholderColor3 = Color3.fromRGB(194, 194, 194)
+			SearchBox.Text = ""
+			SearchBox.PlaceholderText = "SEARCH HERE"
+			SearchBox.TextColor3 = MainTextColor
+			SearchBox.TextSize = 34.000
+			SearchBox.TextWrapped = true
+
+			SearchBoxCorner.CornerRadius = UDim.new(0, 5)
+			SearchBoxCorner.Name = "SearchBoxCorner"
+			SearchBoxCorner.Parent = SearchBox
+
+			DropdownContainers.ChildAdded:Connect(function()
+				DropdownContainers.CanvasSize = UDim2.new(0,0,0, DropdownUIGridLayout.AbsoluteContentSize.Y + 80)
+			end)
+
+			for i,v in pairs(itemlist) do
+				local Item = Instance.new("TextButton")
+				local ItemCorner = Instance.new("UICorner")
+				local ItemUIPadding = Instance.new("UIPadding")
+
+				Item.Name = v or "Item"
+				Item.Parent = DropdownContainers
+				Item.BackgroundColor3 = MainBlueColor
+				Item.Size = UDim2.new(0, 392, 0, 30)
+				Item.Font = Enum.Font.SourceSans
+				Item.Text = v or "Item"
+				Item.TextColor3 = MainTextColor
+				Item.TextSize = 26.000
+				Item.TextWrapped = true
+
+				ItemCorner.CornerRadius = UDim.new(0, 5)
+				ItemCorner.Name = "ItemCorner"
+				ItemCorner.Parent = Item
+
+				Item.MouseButton1Click:Connect(function()
+					DropdownText.Text = name..": "..v
+					pcall(callback, v)
+					for _,v in pairs(DropdownContainers.Parent.Parent:GetChildren()) do
+						if v:IsA("Frame") or v:IsA("TextButton") then
+							v.Visible = true
+						end
+					end
+					DropdownContainers.Visible = false
+				end)
+			end
+
+			DropdownToggleButton.MouseButton1Click:Connect(function()
+				if DropdownContainers.Visible == true then
+					for i,v in pairs(DropdownContainers.Parent.Parent:GetChildren()) do
+						if v:IsA("Frame") or v:IsA("TextButton") then
+							v.Visible = true
+						end
+					end
+					DropdownContainers.Visible = false
+				else
+					for i,v in pairs(DropdownContainers.Parent.Parent:GetChildren()) do
+						if v:IsA("Frame") or v:IsA("TextButton") then
+							v.Visible = false
+						end
+					end
+					DropdownContainers.Visible = true
+					DropdownContainers.Parent.Visible = true
+				end
+			end)
+
+
+            SearchBox.Changed:Connect(function(property)
+				if SearchBox.Text == "" then
+				else
+					DropdownText.Text = name..": "..SearchBox.Text
+				end
+            end)
+
+            --[[
+			SearchBox.Changed:Connect(function(property)
+				if not tostring(property):lower() == "text" then
+					return
+				end
+				if string.len(SearchBox.Text) > 0 then
+					local SearchItmes = search_items(SearchBox.Text:lower())
+					for _,v in pairs(SearchBox.Parent:GetChildren()) do
+						if v.Name == "DropdownUIPadding" or v.Name == "DropdownUIGridLayout" or v.Name == "SearchBox" or v.Name == "LocalScript"  then
+						else
+							v.Visible = false
+						end
+					end
+					for _,v in pairs(SearchItmes) do
+						--print(v.Name)          
+						if v.Name == "DropdownUIPadding" or v.Name == "DropdownUIGridLayout" or v.Name == "SearchBox" or v.Name == "LocalScript" then
+						else				
+							v.Visible = true
+						end
+					end
+				else
+					for _,v in pairs(SearchBox.Parent:GetChildren()) do
+						if v.Name == "DropdownUIPadding" or v.Name == "DropdownUIGridLayout" or v.Name == "SearchBox" or v.Name == "LocalScript" then
+						else				
+							v.Visible = true
+						end
+					end
+				end
+			end)
+
+			function search_items(str)
+				local found_items = {}
+				for _,v in pairs(SearchBox.Parent:GetChildren()) do
+					local listname = v.Name:lower()
+					--if listname ~= "dropdownuigridpadding" then
+					--	if listname ~= "dropdownuigridlayout" then
+					--		if listname ~= "searchbox" then
+								if string.match(listname,str) ~= nil then
+									table.insert(found_items,v)
+									print("Item found:" .. listname .. " | " .. str)
+					--			end
+					--		end
+					--	end
+					end
+				end
+				return found_items
+			end]]
+
+		end
+
+		function module:CreateLabel(name)
+			assert(type(name) == "string", "specify type string for CreateLabel() function")
+
+			local LabelFrame = Instance.new("Frame")
+			local Label = Instance.new("TextLabel")
+			--local LabelUIStroke = Instance.new("UIStroke")
+
+			LabelFrame.Name = name
+			LabelFrame.Parent = Categories
+			LabelFrame.BackgroundColor3 = MainTextColor
+			LabelFrame.BackgroundTransparency = 1.000
+			LabelFrame.Size = UDim2.new(0, 100, 0, 100)
+
+			Label.Name = "Label"
+			Label.Parent = LabelFrame
+			Label.BackgroundColor3 = MainTextColor
+			Label.BackgroundTransparency = 1.000
+			Label.Size = UDim2.new(1, 0, 0, 32)
+			Label.Font = Enum.Font.SourceSans
+			Label.Text = name
+			Label.TextColor3 = MainBlueColor
+			Label.TextSize = 26.000
+			--Label.TextStrokeTransparency = 0.6
+
+			--LabelUIStroke.Name = "TextLabelUIStroke"
+			--LabelUIStroke.Parent = Label
+			--LabelUIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+			--LabelUIStroke.Color = Color3.fromRGB(0,0,0)
+		end
+
+		return module
+	end
+	return category
+end
+return library;
